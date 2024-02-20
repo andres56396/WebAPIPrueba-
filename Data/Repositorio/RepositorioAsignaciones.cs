@@ -33,9 +33,8 @@ namespace Data.Repositorio
         public async Task<dynamic> ProcemientoEliminarAsignacion(int idAsignacion)
         {
             // Ejecutar el procedimiento almacenado con el ID de la asignación como parámetro
-            var resultado = _db.Asignaciones.FromSqlRaw("exec EliminarRegistroAsignacion @IDAsignacion", new SqlParameter("@IDAsignacion", idAsignacion)).ToList();
-            
-            return (resultado);
+              await _db.Database.ExecuteSqlRawAsync("exec EliminarRegistroAsignacion @IDAsignacion", new SqlParameter("@IDAsignacion", idAsignacion));
+              return "OK";
         }
 
         // Método para ejecutar el procedimiento almacenado para registrar una nueva asignación
@@ -50,7 +49,8 @@ namespace Data.Repositorio
             };
 
             // Ejecutar el procedimiento almacenado con los parámetros especificados
-            _db.Asignaciones.FromSqlRaw("exec RegistrarAsignacion @Detalle, @IDEstudiante,@IDAsignatura", parametros).ToList();
+            
+            await _db.Database.ExecuteSqlRawAsync("exec RegistrarAsignacion @Detalle, @IDEstudiante, @IDAsignatura", parametros);
             return "OK";
         }
     }
